@@ -1,0 +1,11 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*/bin
+*/obj
+/Challenge.WebApi/Challenge.Infrastructure/bin/Debug/net6.0
+/Challenge.WebApi/Challenge.Infrastructure/obj
+/Challenge.WebApi/Challenge.WebApi/bin/Debug/net6.0
+/Challenge.WebApi/Challenge.WebApi/obj
+/Challenge.WebApi/.vs/Challenge.WebApi/v17
