@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenge.Domain", "Challen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenge.Service", "Challenge.Service\Challenge.Service.csproj", "{3B83BB06-B986-4D29-8B96-899D5AD763CB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Challenge.Bot", "Challenge.Bot\Challenge.Bot.csproj", "{AA3A6773-A3C2-4DE0-8ABD-AC35429A698B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3B83BB06-B986-4D29-8B96-899D5AD763CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B83BB06-B986-4D29-8B96-899D5AD763CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B83BB06-B986-4D29-8B96-899D5AD763CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA3A6773-A3C2-4DE0-8ABD-AC35429A698B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA3A6773-A3C2-4DE0-8ABD-AC35429A698B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA3A6773-A3C2-4DE0-8ABD-AC35429A698B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA3A6773-A3C2-4DE0-8ABD-AC35429A698B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

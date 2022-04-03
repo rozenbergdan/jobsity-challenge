@@ -3,6 +3,7 @@ using Challenge.Domain.Options;
 using Challenge.Service.Interfaces;
 using Confluent.Kafka;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,11 @@ namespace Challenge.Service.Implementations
         public void Send(Message message)
         {
             using (var producer =
-                 new ProducerBuilder<Null, Message>(config).Build())
+                 new ProducerBuilder<string, string>(config).Build())
             {
                 try
                 {
-                    producer.Produce(kafkasettings.Value.Topic, new Message<Null, Message> { Value = message });    
+                    producer.ProduceAsync(kafkasettings.Value.Topic, new Message<string, string> { Value = JsonConvert.SerializeObject(message)}).Wait();    
                 }
                 catch (Exception e)
                 {
