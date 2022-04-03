@@ -2,7 +2,6 @@ using Challenge.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 using Microsoft.AspNetCore.Identity;
 using Challenge.Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,6 +10,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Challenge.Service.Interfaces;
 using Challenge.Service.Implementations;
+using System.Configuration;
+using Challenge.Domain.Options;
+using Challenge.Infrastructure.Kafka;
+using Challenge.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -33,7 +36,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAuthentication, JwtAuthentication>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
+builder.Services.AddScoped<KafkaService>();
+builder.Services.AddScoped<ChatService>();
+builder.Services.AddScoped<Func<string, IMessage>>((context) => {
+    return message =>
+    {
+        if (message.StartsWith("/stock"))
+            return context.GetService<KafkaService>();
 
+        return context.GetService<ChatService>();
+    };
+    });
+
+builder.Services.AddScoped<IMessage, KafkaService>();
+//builder.Services.AddHostedService<KafkaConsumerHandler>();
+
+
+builder.Services.Configure<KafkaSettings>(builder.Configuration.GetSection(nameof(KafkaSettings)));
 
 builder.Services.AddDbContext<ChallengeDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<ChallengeIdentityDbContext>(options =>

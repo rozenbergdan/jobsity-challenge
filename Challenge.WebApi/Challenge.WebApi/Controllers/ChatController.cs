@@ -1,17 +1,35 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Challenge.Domain.DTO;
+using Challenge.Domain.Entities;
+using Challenge.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Challenge.WebApi.Controllers
 {
-    [Route("/api/chat")]
+    [Route("/api/chatroom")]
     [ApiController]
-    public class ChatController : Controller
+    public class ChatroomController : Controller
     {
-        [HttpGet("message")]
-        [Authorize(Roles = "User")]
-        public string Login()
+        private Func<string, IMessage> messageService;
+        public ChatroomController(Func<string,IMessage> messageService)
         {
-            return "Llegamo";
+            this.messageService = messageService;   
+        }
+
+        [HttpPost("{chatroom}/message/send")]
+        public IActionResult SendMessage(int chatroom, [FromBody] MessageDTO message)
+        {
+            if (string.IsNullOrEmpty(message.Message))
+                return BadRequest("Message empty");
+
+            this.messageService(message.Message).Send(new Message
+            {
+                Chatroom = chatroom,
+                Content = message.Message,
+                Date = DateTimeOffset.UtcNow,
+                Username = "goku" //HttpContext.User.Identity.Name,
+            });
+            return Ok();
         }
     }
 }

@@ -1,36 +1,31 @@
 {
+  "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:50868",
-      "sslPort": 44336
+      "applicationUrl": "http://localhost:40918",
+      "sslPort": 44361
     }
   },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "IIS Express": {
-      "commandName": "IISExpress",
+    "Challenge.WebApi": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "swagger/v1/swagger.json",
+      "launchUrl": "swagger",
+      "applicationUrl": "http://localhost:8080",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Challenge.WebApi": {
-      "commandName": "Project",
+    "IIS Express": {
+      "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "/swagger",
+      "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Local"
-      },
-      "applicationUrl": "http://localhost:8080"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "httpPort": 50869,
-      "useSSL": true,
-      "sslPort": 44337
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
