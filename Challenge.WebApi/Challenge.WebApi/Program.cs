@@ -7,24 +7,43 @@ using Microsoft.AspNetCore.Identity;
 using Challenge.Infrastructure.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Challenge.WebApi;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Challenge.Service.Interfaces;
+using Challenge.Service.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-
+    .AddJwtBearer(options => {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IAuthentication, JwtAuthentication>();
+
+
 builder.Services.AddDbContext<ChallengeDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddDefaultIdentity<ChallengeUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ChallengeIdentityDbContext>();
 builder.Services.AddDbContext<ChallengeIdentityDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+builder.Services.AddIdentity<ChallengeUser, IdentityRole>(options =>
+{
+    options.User.RequireUniqueEmail = false;
+})
+    .AddEntityFrameworkStores<ChallengeIdentityDbContext>()
+    .AddDefaultTokenProviders();
 var app = (WebApplication)builder.Build().MigrateDbContext<ChallengeIdentityDbContext>().MigrateDbContext<ChallengeDbContext>();
 
 // Configure the HTTP request pipeline.
@@ -45,3 +64,4 @@ app.UseCors(options=> options
 app.MapControllers();
 
 app.Run();
+

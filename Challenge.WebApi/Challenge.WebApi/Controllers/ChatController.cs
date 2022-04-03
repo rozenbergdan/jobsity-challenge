@@ -1,15 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Challenge.WebApi.Controllers
 {
-    [Route("api")]
+    [Route("/api/chat")]
     [ApiController]
     public class ChatController : Controller
     {
-        [HttpPost("message")]
-        public string Index()
+        [HttpGet("message")]
+        [Authorize(Roles = "User")]
+        public string Login()
         {
-            return "";
+            return "Llegamo";
         }
     }
 }

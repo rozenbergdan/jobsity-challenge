@@ -85,6 +85,50 @@ namespace Challenge.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "21397611-90c1-4359-94d0-0800eb2a4f5b",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "d41c1b17-b040-4bcc-885b-5a51cd04dbaf",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "GOKU",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBTlhqcVj0k7SPg197nh509DSNbXwB1f/X8hYJ2aFR2+pLqacx2tRe4pJWkHZEf7Yw==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "6c2c0079-dbe0-419e-aa02-baf9e99e057c",
+                            TwoFactorEnabled = false,
+                            UserName = "goku"
+                        },
+                        new
+                        {
+                            Id = "25caed64-ae6c-4069-bb72-554ad038498e",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "4f7f3b20-cc62-4c7e-ab80-4254da2d8b84",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "KRILIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIMCXmszXO8Z0am9JV73I0WKTF2mx85Zict+LMq+IlK8ANnpqsv76fesOGCgDxx3sQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "772c0fe4-45a8-4bd5-baf4-f26c25640df1",
+                            TwoFactorEnabled = false,
+                            UserName = "krilin"
+                        },
+                        new
+                        {
+                            Id = "c09e1e40-dc1f-45b7-8b52-b65145954d94",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "dacf5aeb-e43f-42c4-a7b2-c0676ae43301",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedUserName = "VEGETA",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKCiLuWP5DVNMGsJVPUA8+R3P0yO0eYovB7qg2ei4GX2tBrn7DI77tDhGW+Nyh8IYA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "251327fb-9abe-405b-b4f4-f0273693df45",
+                            TwoFactorEnabled = false,
+                            UserName = "vegeta"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -112,6 +156,15 @@ namespace Challenge.Infrastructure.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "2c7a3320-0d7f-4b8a-88d7-93d855462f90",
+                            ConcurrencyStamp = "6a5f9d98-6ac2-4937-95b6-16121b272a30",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -201,6 +254,23 @@ namespace Challenge.Infrastructure.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "21397611-90c1-4359-94d0-0800eb2a4f5b",
+                            RoleId = "2c7a3320-0d7f-4b8a-88d7-93d855462f90"
+                        },
+                        new
+                        {
+                            UserId = "25caed64-ae6c-4069-bb72-554ad038498e",
+                            RoleId = "2c7a3320-0d7f-4b8a-88d7-93d855462f90"
+                        },
+                        new
+                        {
+                            UserId = "c09e1e40-dc1f-45b7-8b52-b65145954d94",
+                            RoleId = "2c7a3320-0d7f-4b8a-88d7-93d855462f90"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>

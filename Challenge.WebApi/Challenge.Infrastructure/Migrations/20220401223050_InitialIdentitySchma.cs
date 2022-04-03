@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Challenge.Infrastructure.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class InitialIdentitySchma : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -153,6 +153,36 @@ namespace Challenge.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "2c7a3320-0d7f-4b8a-88d7-93d855462f90", "6a5f9d98-6ac2-4937-95b6-16121b272a30", "User", "USER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "21397611-90c1-4359-94d0-0800eb2a4f5b", 0, "d41c1b17-b040-4bcc-885b-5a51cd04dbaf", null, false, false, null, null, "GOKU", "AQAAAAEAACcQAAAAEBTlhqcVj0k7SPg197nh509DSNbXwB1f/X8hYJ2aFR2+pLqacx2tRe4pJWkHZEf7Yw==", null, false, "6c2c0079-dbe0-419e-aa02-baf9e99e057c", false, "goku" },
+                    { "25caed64-ae6c-4069-bb72-554ad038498e", 0, "4f7f3b20-cc62-4c7e-ab80-4254da2d8b84", null, false, false, null, null, "KRILIN", "AQAAAAEAACcQAAAAEIMCXmszXO8Z0am9JV73I0WKTF2mx85Zict+LMq+IlK8ANnpqsv76fesOGCgDxx3sQ==", null, false, "772c0fe4-45a8-4bd5-baf4-f26c25640df1", false, "krilin" },
+                    { "c09e1e40-dc1f-45b7-8b52-b65145954d94", 0, "dacf5aeb-e43f-42c4-a7b2-c0676ae43301", null, false, false, null, null, "VEGETA", "AQAAAAEAACcQAAAAEKCiLuWP5DVNMGsJVPUA8+R3P0yO0eYovB7qg2ei4GX2tBrn7DI77tDhGW+Nyh8IYA==", null, false, "251327fb-9abe-405b-b4f4-f0273693df45", false, "vegeta" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "2c7a3320-0d7f-4b8a-88d7-93d855462f90", "21397611-90c1-4359-94d0-0800eb2a4f5b" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "2c7a3320-0d7f-4b8a-88d7-93d855462f90", "25caed64-ae6c-4069-bb72-554ad038498e" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "2c7a3320-0d7f-4b8a-88d7-93d855462f90", "c09e1e40-dc1f-45b7-8b52-b65145954d94" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

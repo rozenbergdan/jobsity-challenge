@@ -9,3 +9,8 @@
 /Challenge.WebApi/Challenge.WebApi/bin/Debug/net6.0
 /Challenge.WebApi/Challenge.WebApi/obj
 /Challenge.WebApi/.vs/Challenge.WebApi/v17
+/Challenge.WebApi/Challenge.Domain/bin/Debug/net6.0
+/Challenge.WebApi/Challenge.Domain/obj
+/Challenge.WebApi/.vs/Challenge.WebApi
+/Challenge.WebApi/Challenge.Service/obj
+/Challenge.WebApi/Challenge.Service/bin/Debug/net6.0
