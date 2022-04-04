@@ -10,27 +10,40 @@ namespace Challenge.WebApi.Controllers
     [ApiController]
     public class ChatroomController : BaseController
     {
-        //private Func<string, IMessage> messageService;
-        //public ChatroomController(Func<string,IMessage> messageService)
-        //{
-        //    this.messageService = messageService;   
-        //}
+        private Func<string, IMessage> messageService;
+        private readonly IConfiguration config;
 
-        [HttpPost("{chatroom}/message/send")]
+        private IChatRoomService chatRoomService { get; }
+
+        public ChatroomController(Func<string, IMessage> messageService, IChatRoomService chatRoomService, IConfiguration config)
+        {
+            this.messageService = messageService;
+            this.chatRoomService = chatRoomService;
+            this.config = config;
+        }
+
+        [HttpPost("{chatroom}/messages/send")]
         [Authorize]
         public IActionResult SendMessage(int chatroom, [FromBody] MessageDTO message)
         {
             if (string.IsNullOrEmpty(message.Message))
                 return BadRequest("Message empty");
-            
-            //this.messageService(message.Message).Send(new Message
-            //{
-            //    Chatroom = chatroom,
-            //    Content = message.Message,
-            //    Date = DateTimeOffset.UtcNow,
-            //    Username = "goku" //HttpContext.User.Identity.Name,
-            //});
+
+            this.messageService(message.Message).Send(new Message
+            {
+                Chatroom = chatroom,
+                Content = message.Message,
+                Date = DateTime.UtcNow,
+                Username = HttpContext.User.Identity.Name,
+            });
             return Ok();
+        }
+
+        [HttpGet("{chatroom}/messages")]
+        [Authorize]
+        public IEnumerable<ChatRoomMessageDTO> GetAll(int chatroom)
+        {
+            return chatRoomService.GetLasts(chatroom, config.GetValue<int>("chatroomSize"));
         }
     }
 }

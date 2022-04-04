@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Challenge.Infrastructure.Migrations.ChallengeDb
 {
     [DbContext(typeof(ChallengeDbContext))]
-    [Migration("20220403194714_InitialChatTables")]
+    [Migration("20220404211543_InitialChatTables")]
     partial class InitialChatTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,6 +90,9 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()

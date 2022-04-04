@@ -71,7 +71,7 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("Challenge.Infrastructure.Entities.ChatMessage", b =>
@@ -89,6 +89,9 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -99,7 +102,7 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessage", (string)null);
+                    b.ToTable("ChatMessage");
                 });
 
             modelBuilder.Entity("Challenge.Infrastructure.Entities.ChatRoom", b =>
@@ -116,7 +119,7 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatRooms", (string)null);
+                    b.ToTable("ChatRooms");
 
                     b.HasData(
                         new

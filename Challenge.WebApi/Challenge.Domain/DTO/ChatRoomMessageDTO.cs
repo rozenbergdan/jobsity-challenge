@@ -4,15 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Challenge.Domain.Entities
+namespace Challenge.Domain.DTO
 {
-    public class Message
+    public class ChatRoomMessageDTO
     {
         public int Id { get; set; }
-        public int Chatroom { get; set; }
         public string Content { get; set; }
-        public string Username { get; set; }
-        public DateTime Date { get; set; }
-
+        public string UserName { get; set; }
+        public DateTime Created { get; set; }
     }
 }

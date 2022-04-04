@@ -13,10 +13,10 @@ namespace Challenge.Service.Implementations
 {
     public class ChatService : IMessage
     {
-        private readonly IRepository<ChatMessage> repository;
+        private readonly IChatMessageRepository repository;
         public UserManager<ChallengeUser> UserManager { get; }
 
-        public ChatService(IRepository<ChatMessage> repository, UserManager<ChallengeUser> userManager)
+        public ChatService(IChatMessageRepository repository, UserManager<ChallengeUser> userManager)
         {
             this.repository = repository;
             UserManager = userManager;
@@ -32,6 +32,7 @@ namespace Challenge.Service.Implementations
                 Content = message.Content,
                 ChatRoomId = message.Chatroom,
                 UserId = user.Id,
+                Created = message.Date
             });
         }
     }

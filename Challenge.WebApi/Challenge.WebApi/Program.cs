@@ -35,7 +35,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IAuthentication, JwtAuthentication>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(SqlRepository<>));
+builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
+builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<KafkaService>();
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<Func<string, IMessage>>((context) =>

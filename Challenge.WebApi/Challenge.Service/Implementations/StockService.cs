@@ -1,5 +1,6 @@
 ﻿using Challenge.Domain.DTO;
 using Challenge.Domain.Entities;
+using Challenge.Infrastructure.Exceptions;
 using Challenge.Service.Interfaces;
 using CsvHelper;
 using Microsoft.Extensions.Configuration;
@@ -31,28 +32,17 @@ namespace Challenge.Service.Implementations
 
         public async void RetrieveStockMessage(Message command)
         {
-            string quote;
-            using (var client = new HttpClient())
-            {
-                var stockcode = command.Content.Split('=')[1];
+            var stockcode = command.Content.Split('=')[1];
+            var quote = await GetQuote(stockcode);
+            var messageContent = $"{stockcode.ToUpper()} quote is ${quote} per share";
+            await SendTheNewMessage(command.Chatroom, messageContent);
+        }
 
-                using (var result = await client.GetAsync("https://stooq.com/q/l/?s="+stockcode+"&f=sd2t2ohlcv&h&e=csv"))
-                {
-                    if (result.IsSuccessStatusCode)
-                    {
-                        using (var reader = new StreamReader(result.Content.ReadAsStream()))
-                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                        {
-                            var records = csv.GetRecords<CsvStockDTO>();
-                            quote = records.First().Close;
-                        }
-                    }
-
-                }
-            }
+        private async Task SendTheNewMessage(int chatroomId, string messageContent)
+        {
             var token = auth.Generate(conf["botUsername"]);
-            var url = conf["ChallengeWebApiPostMessage"].Replace("{chatroomId}", command.Chatroom.ToString());
-            
+            var url = conf["ChallengeWebApiPostMessage"].Replace("{chatroomId}", chatroomId.ToString());
+
             using (var client = new HttpClient())
             {
 
@@ -62,13 +52,34 @@ namespace Challenge.Service.Implementations
                       .Accept
                       .Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,"");
-                request.Content = new StringContent(JsonConvert.SerializeObject(new MessageDTO("MENSAJE ACA")),
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "");
+                request.Content = new StringContent(JsonConvert.SerializeObject(new MessageDTO(messageContent)),
                                                     Encoding.UTF8,
                                                     "application/json");
                 var response = await client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
             }
+        }
+
+        private static async Task<string> GetQuote(string stockcode)
+        {
+            using (var client = new HttpClient())
+            {
+                using (var result = await client.GetAsync("https://stooq.com/q/l/?s=" + stockcode + "&f=sd2t2ohlcv&h&e=csv"))
+                {
+                    if (result.IsSuccessStatusCode)
+                    {
+                        using (var reader = new StreamReader(result.Content.ReadAsStream()))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                        {
+                            var records = csv.GetRecords<CsvStockDTO>();
+                            return records.First().Close;
+                        }
+                    }
+
+                }
+            }
+            throw new DomainException("We can't reach the quote now, try later");
         }
     }
 }

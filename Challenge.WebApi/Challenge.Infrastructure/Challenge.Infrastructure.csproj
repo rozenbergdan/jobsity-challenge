@@ -22,5 +22,10 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Challenge.Domain\Challenge.Domain.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Migrations\ChallengeDb\" />
+	  <Folder Include="WebSocket\" />
+	</ItemGroup>
 	
 </Project>
