@@ -71,7 +71,7 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("Challenge.Infrastructure.Entities.ChatMessage", b =>
@@ -99,7 +99,7 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatMessage");
+                    b.ToTable("ChatMessage", (string)null);
                 });
 
             modelBuilder.Entity("Challenge.Infrastructure.Entities.ChatRoom", b =>
@@ -116,7 +116,7 @@ namespace Challenge.Infrastructure.Migrations.ChallengeDb
 
                     b.HasKey("Id");
 
-                    b.ToTable("ChatRooms");
+                    b.ToTable("ChatRooms", (string)null);
 
                     b.HasData(
                         new

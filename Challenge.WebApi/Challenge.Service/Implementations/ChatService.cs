@@ -33,8 +33,6 @@ namespace Challenge.Service.Implementations
                 ChatRoomId = message.Chatroom,
                 UserId = user.Id,
             });
-
-            var chat = this.repository.Find(1);
         }
     }
 }

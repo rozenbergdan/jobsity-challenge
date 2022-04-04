@@ -26,12 +26,12 @@ namespace Challenge.Service.Implementations
 
         public async void Send(Message message)
         {
-            using (var producer =
+            using (var producer = 
                  new ProducerBuilder<string, string>(config).Build())
             {
                 try
                 {
-                    await producer.ProduceAsync(kafkasettings.Value.Topic, new Message<string, string> { Value = message.Content });    
+                    await producer.ProduceAsync(kafkasettings.Value.Topic, new Message<string, string> { Value = JsonConvert.SerializeObject(message) });    
                 }
                 catch (Exception e)
                 {

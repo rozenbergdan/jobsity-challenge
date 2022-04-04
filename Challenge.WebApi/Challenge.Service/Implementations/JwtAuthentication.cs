@@ -25,7 +25,10 @@ namespace Challenge.Service.Implementations
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.NameIdentifier, username),
+                new Claim(ClaimTypes.Email, "hola"),
+                new Claim(ClaimTypes.GivenName, "hola"),
+                new Claim(ClaimTypes.Surname, "hola"),
                 new Claim(ClaimTypes.Role, "User")
             };
 
