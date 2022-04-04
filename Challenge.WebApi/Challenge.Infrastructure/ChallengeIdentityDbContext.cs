@@ -60,6 +60,16 @@ namespace Challenge.Infrastructure
                 }
             );
 
+            modelBuilder.Entity<ChallengeUser>().HasData(
+                new ChallengeUser
+                {
+                    Id = "9efc17fe-738a-4b4c-bdb6-002d17605b7c", // primary key
+                    UserName = "stock_bot",
+                    NormalizedUserName = "STOCK_BOT",
+                    PasswordHash = hasher.HashPassword(null, "bot$11")
+                }
+            );
+
             //Seeding the relation between our user and role to AspNetUserRoles table
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string>
@@ -76,6 +86,11 @@ namespace Challenge.Infrastructure
                 {
                     RoleId = "2c7a3320-0d7f-4b8a-88d7-93d855462f90",
                     UserId = "c09e1e40-dc1f-45b7-8b52-b65145954d94"
+                },
+                new IdentityUserRole<string>
+                {
+                    RoleId = "2c7a3320-0d7f-4b8a-88d7-93d855462f90",
+                    UserId = "9efc17fe-738a-4b4c-bdb6-002d17605b7c"
                 }
             );
 

@@ -23,6 +23,12 @@
     <PackageReference Include="Confluent.Kafka" Version="1.8.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Challenge.Infrastructure\Challenge.Infrastructure.csproj" />
+    <ProjectReference Include="..\Challenge.Service\Challenge.Service.csproj" />
   </ItemGroup>
 
 </Project>
