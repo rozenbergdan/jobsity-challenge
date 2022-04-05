@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Challenge.Infrastructure.WebSocket;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,39 +8,39 @@ using System.Text;
 
 namespace Challenge.Infrastructure
 {
-    public class WebSocketConnectionManager
+    public class WebSocketConnectionManager : IWebSocketManager
     {
         public WebSocketConnectionManager()
         {
 
         }
 
-        private ConcurrentDictionary<int,ConcurrentDictionary<string, WebSocket>> _sockets = new ConcurrentDictionary<int, ConcurrentDictionary<string, WebSocket>>();
+        private ConcurrentDictionary<int,ConcurrentDictionary<string, System.Net.WebSockets.WebSocket>> _sockets = new ConcurrentDictionary<int, ConcurrentDictionary<string, System.Net.WebSockets.WebSocket>>();
 
-        public WebSocket GetSocketById(string id,int roomid)
+        public System.Net.WebSockets.WebSocket GetSocketById(string id,int roomid)
         {
             return _sockets[roomid].FirstOrDefault(p => p.Key == id).Value;
         }
 
-        public ConcurrentDictionary<string, WebSocket> GetAll(int roomid)
+        public ConcurrentDictionary<string, System.Net.WebSockets.WebSocket> GetAll(int roomid)
         {
             return _sockets[roomid];
         }
 
-        public string GetId(WebSocket socket,int roomid)
+        public string GetId(System.Net.WebSockets.WebSocket socket,int roomid)
         {
             return _sockets[roomid].FirstOrDefault(p => p.Value == socket).Key;
         }
 
-        public void AddSocket(WebSocket socket, int roomid)
+        public void AddSocket(System.Net.WebSockets.WebSocket socket, int roomid)
         {
             if (!_sockets.ContainsKey(roomid))
-                _sockets.TryAdd(roomid, new ConcurrentDictionary<string, WebSocket>());
+                _sockets.TryAdd(roomid, new ConcurrentDictionary<string, System.Net.WebSockets.WebSocket>());
 
             _sockets[roomid].TryAdd(CreateConnectionId(), socket);
         }
 
-        public async Task RemoveSocket(WebSocket socket,int roomid)
+        public async Task RemoveSocket(System.Net.WebSockets.WebSocket socket,int roomid)
         {
             var id = GetId(socket,roomid);
             await RemoveSocket(id,roomid);
@@ -47,7 +48,7 @@ namespace Challenge.Infrastructure
 
         public async Task RemoveSocket(string id,int roomid)
         {
-            WebSocket socket;
+            System.Net.WebSockets.WebSocket socket;
             _sockets[roomid].TryRemove(id, out socket);
 
             await socket.CloseAsync(closeStatus: System.Net.WebSockets.WebSocketCloseStatus.NormalClosure,
@@ -55,7 +56,7 @@ namespace Challenge.Infrastructure
                                     cancellationToken: CancellationToken.None);
         }
 
-        public async Task SendMessageAsync(WebSocket socket, string message)
+        public async Task SendMessageAsync(System.Net.WebSockets.WebSocket socket, string message)
         {
             if (socket.State != System.Net.WebSockets.WebSocketState.Open)
                 return;

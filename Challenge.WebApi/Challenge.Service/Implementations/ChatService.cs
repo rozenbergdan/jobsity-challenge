@@ -2,6 +2,7 @@
 using Challenge.Infrastructure;
 using Challenge.Infrastructure.Entities;
 using Challenge.Infrastructure.Repository;
+using Challenge.Infrastructure.WebSocket;
 using Challenge.Service.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -15,11 +16,11 @@ namespace Challenge.Service.Implementations
     public class ChatService : IMessage
     {
         private readonly IChatMessageRepository repository;
-        private readonly WebSocketConnectionManager webSocket;
+        private readonly IWebSocketManager webSocket;
 
         public UserManager<ChallengeUser> UserManager { get; }
 
-        public ChatService(IChatMessageRepository repository, UserManager<ChallengeUser> userManager, WebSocketConnectionManager webSocket)
+        public ChatService(IChatMessageRepository repository, UserManager<ChallengeUser> userManager, IWebSocketManager webSocket)
         {
             this.repository = repository;
             UserManager = userManager;

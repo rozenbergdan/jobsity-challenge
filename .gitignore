@@ -16,3 +16,5 @@
 /Challenge.WebApi/Challenge.Service/bin/Debug/net6.0
 /Challenge.WebApi/Challenge.Bot/bin/Debug/net6.0
 /Challenge.WebApi/Challenge.Bot/obj
+/Challenge.WebApi/Challenge.UnitTests/bin/Debug/net6.0
+/Challenge.WebApi/Challenge.UnitTests/obj

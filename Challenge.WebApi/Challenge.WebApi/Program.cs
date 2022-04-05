@@ -2,6 +2,7 @@ using Challenge.Domain.Options;
 using Challenge.Infrastructure;
 using Challenge.Infrastructure.Entities;
 using Challenge.Infrastructure.Repository;
+using Challenge.Infrastructure.WebSocket;
 using Challenge.Service.Implementations;
 using Challenge.Service.Interfaces;
 using Challenge.WebApi;
@@ -40,7 +41,7 @@ builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<KafkaService>();
 builder.Services.AddScoped<ChatService>();
-builder.Services.AddSingleton<WebSocketConnectionManager>();
+builder.Services.AddSingleton<IWebSocketManager, WebSocketConnectionManager>();
 builder.Services.AddScoped<Func<string, IMessage>>((context) =>
 {
     return message =>
@@ -98,7 +99,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapRazorPages();
 });
 
-var websocketsManager = app.Services.GetService<WebSocketConnectionManager>();
+var websocketsManager = app.Services.GetService<IWebSocketManager>();
 
 app.Use(async (context, next) =>
 {
