@@ -1,0 +1,91 @@
+<script type="text/javascript" src="jquery-3.6.0.min.js"> </script> 
+<script>
+	var mytoken;
+	$(document).ready(function(){
+		mytoken = sessionStorage.getItem('mytoken');
+		if(mytoken == null){
+			window.location = 'index.html';
+		}
+	});
+	$(document).on('keypress',function(e) {
+		if(e.which == 13) {
+			if($("#box").val() != "")
+			{
+				sendMessage();
+			}
+		}
+	});
+	var ws;
+	var chatroom;
+	function getval(sel)
+	{
+		if(sel.value == "-1"){
+			$("#room").hide();
+			return;
+		}
+		
+		$("#room").show();
+		$("#chat").html("");
+		$("#box").val("");
+		if(ws !== undefined)
+			ws.close();
+		
+		chatroom = sel.value;
+		ws = new WebSocket("ws://localhost:8080/ws/"+sel.value);
+		ws.onmessage = function(frame) 
+		{
+			console.log(frame.data);
+			var message = $.parseJSON(frame.data);
+			console.log(message);
+			var localDate = new Date(message.Date);
+			if($("#chat p").length == 50){
+				$("#chat p").first().remove();
+			}
+			$("#chat").append("<p>["+localDate.toISOString()+"] " + message.Username +" said: " + message.Content+"</p>")
+		};
+	}
+	
+	function sendMessage(){
+		m = $("#box").val();
+		
+		$.ajax({url: "http://localhost:8080/api/chatroom/"+chatroom+"/messages/send",
+			type: "POST",
+			contentType: "application/json",
+			beforeSend: function(request) {
+				request.setRequestHeader("Authorization", "Bearer " +mytoken);
+			  },
+			data: JSON.stringify({ message: m}),
+			success: function(data, status){
+				$("#box").val("");
+				$("#box").focus();
+			},
+			error: function(result, status){
+				
+			}});
+	}
+	
+</script>
+<style>
+
+</style>
+<html>
+	<body>
+		<div id="chatroom">
+			Chatroom: <select id="chatroom" onchange="getval(this);" />
+				<option value="-1"> pick one</option>
+				<option value="1"> IRL</option>
+				<option value="2"> Sports</option>
+				<option value="3"> Politics</option>
+			</select>
+		</div>
+		<div id="room" style="display:none">
+			<div style="height:90%" id="chat">
+				
+			</div>
+			<div style="position:relative">
+				<input type="text" id="box" style="width:90%" placeholder="type here..." />
+				<input type="button" value="Send" onclick="sendMessage()"></input>
+			</div>
+		</div>
+	<body>
+</html>

@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Challenge.WebApi.ExceptionFilters;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Challenge.WebApi.Controllers
 {
-    //[TypeFilter(typeof(HttpDomainExceptionFilter))]
+    [TypeFilter(typeof(HttpDomainExceptionFilter))]
     
     [ApiController]
     [Produces("application/json")]

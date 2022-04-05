@@ -1,0 +1,40 @@
+<script>
+
+	 function login(){
+		user = $("#username").val();
+		pass = $("#password").val();
+		if(username === "")
+		{
+			alert("enter username");
+			return;
+		}
+		if(password === "")
+		{
+			alert("enter password");
+			return;
+		}
+		console.log(user);
+		$.ajax({url: "http://localhost:8080/api/account/login",
+			type: "POST",
+			data: JSON.stringify({ username: user, password: pass}),
+			contentType: "application/json",
+			success: function(data, status){
+				sessionStorage.setItem('mytoken', data);
+				window.location = 'chatroom.html';
+			},
+			error: function(result, status){
+				alert("user or password is incorrect");
+			}});
+	 }
+</script>
+<script type="text/javascript" src="jquery-3.6.0.min.js"> </script> 
+
+<html>
+	<body>
+		<div id="login">
+			Username: <input type="text" id="username" /><br/>
+			Password: <input type="text" id="password" /><br/>
+			<input type="button" onclick="login()" value="Login"/>
+		<div>
+	<body>
+</html>

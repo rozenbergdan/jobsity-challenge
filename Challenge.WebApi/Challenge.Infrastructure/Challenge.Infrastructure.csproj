@@ -25,7 +25,6 @@
 
 	<ItemGroup>
 	  <Folder Include="Migrations\ChallengeDb\" />
-	  <Folder Include="WebSocket\" />
 	</ItemGroup>
 	
 </Project>

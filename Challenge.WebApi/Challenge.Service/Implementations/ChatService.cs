@@ -1,4 +1,5 @@
 ﻿using Challenge.Domain.Entities;
+using Challenge.Infrastructure;
 using Challenge.Infrastructure.Entities;
 using Challenge.Infrastructure.Repository;
 using Challenge.Service.Interfaces;
@@ -14,17 +15,20 @@ namespace Challenge.Service.Implementations
     public class ChatService : IMessage
     {
         private readonly IChatMessageRepository repository;
+        private readonly WebSocketConnectionManager webSocket;
+
         public UserManager<ChallengeUser> UserManager { get; }
 
-        public ChatService(IChatMessageRepository repository, UserManager<ChallengeUser> userManager)
+        public ChatService(IChatMessageRepository repository, UserManager<ChallengeUser> userManager, WebSocketConnectionManager webSocket)
         {
             this.repository = repository;
             UserManager = userManager;
+            this.webSocket = webSocket;
         }
 
 
 
-        public void Send(Message message)
+        public async void Send(Message message)
         {
             var user = UserManager.FindByNameAsync(message.Username).Result;
             this.repository.Add(new ChatMessage
@@ -34,6 +38,7 @@ namespace Challenge.Service.Implementations
                 UserId = user.Id,
                 Created = message.Date
             });
+            await webSocket.SendMessageToAllAsync(Newtonsoft.Json.JsonConvert.SerializeObject(message),message.Chatroom);
         }
     }
 }

@@ -32,10 +32,20 @@ namespace Challenge.Service.Implementations
 
         public async void RetrieveStockMessage(Message command)
         {
-            var stockcode = command.Content.Split('=')[1];
-            var quote = await GetQuote(stockcode);
-            var messageContent = $"{stockcode.ToUpper()} quote is ${quote} per share";
-            await SendTheNewMessage(command.Chatroom, messageContent);
+            try
+            {
+                var stockcode = command.Content.Split('=')[1];
+                var quote = await GetQuote(stockcode);
+                var messageContent = $"{stockcode.ToUpper()} quote is ${quote} per share";
+                if (!decimal.TryParse(quote, out decimal result))
+                    messageContent = $"The stock code \"{stockcode.ToUpper()}\" does not exists, please check the command";
+
+                await SendTheNewMessage(command.Chatroom, messageContent);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private async Task SendTheNewMessage(int chatroomId, string messageContent)

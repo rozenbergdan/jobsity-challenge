@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Net.WebSockets;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,7 @@ builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
 builder.Services.AddScoped<IChatMessageRepository, ChatMessageRepository>();
 builder.Services.AddScoped<KafkaService>();
 builder.Services.AddScoped<ChatService>();
+builder.Services.AddSingleton<WebSocketConnectionManager>();
 builder.Services.AddScoped<Func<string, IMessage>>((context) =>
 {
     return message =>
@@ -80,13 +82,47 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 app.UseCors(options => options
-    .WithOrigins(new string[] { "http://localhost:3000", "http://localhost:8080", "http://localhost:4200", "http://localhost:5000" })
     .AllowAnyHeader()
-    .AllowAnyMethod());
+    .AllowAnyMethod()
+    .AllowAnyOrigin());
+
+var webSocketOptions = new WebSocketOptions()
+{
+    KeepAliveInterval = TimeSpan.FromSeconds(120),
+    ReceiveBufferSize = 4 * 1024
+};
+app.UseWebSockets(webSocketOptions);
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapRazorPages();
 });
 
+var websocketsManager = app.Services.GetService<WebSocketConnectionManager>();
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.Value.StartsWith("/ws"))
+    {
+        if (context.WebSockets.IsWebSocketRequest)
+        {
+            var roomid = context.Request.Path.Value.Last().ToString();
+            WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync();
+            var socketFinishedTcs = new TaskCompletionSource<object>();
+            websocketsManager.AddSocket(webSocket,int.Parse(roomid));
+            await socketFinishedTcs.Task;
+        }
+        else
+        {
+            context.Response.StatusCode = 400;
+        }
+    }
+    else
+    {
+        await next();
+    }
+});
+
+
 app.Run();
+
